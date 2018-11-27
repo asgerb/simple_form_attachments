@@ -16,8 +16,6 @@ module SimpleFormAttachments
       end
     end
 
-    # =====================================================================
-
     def input(wrapper_options)
       template.content_tag :div, merge_wrapper_options(input_html_options, wrapper_options) do
         template.concat attachment_blank_field
@@ -34,7 +32,11 @@ module SimpleFormAttachments
       end
     end
 
-    private # =============================================================
+    def input_html_classes
+      super.push(SimpleFormAttachments.dom_class)
+    end
+
+    private
 
     def input_html_options
       super.merge(
@@ -47,18 +49,14 @@ module SimpleFormAttachments
       )
     end
 
-    def input_html_classes
-      super.push(SimpleFormAttachments.dom_class)
-    end
 
-    # ---------------------------------------------------------------------
 
     def route_from_configuration
       res = AttachmentInput.configuration.route
       res.respond_to?(:call) ? res.call : res
     end
 
-    # ---------------------------------------------------------------------
+
 
     def relation
       return unless @builder
@@ -97,7 +95,7 @@ module SimpleFormAttachments
       relation.relation.to_s
     end
 
-    # ---------------------------------------------------------------------
+
 
     def multiple?
       return false unless relation
@@ -118,7 +116,7 @@ module SimpleFormAttachments
       options.fetch(:sortable, multiple?)
     end
 
-    # ---------------------------------------------------------------------
+
 
     def attachments
       return @builder.object.send(attribute_name).to_a unless multiple?
@@ -134,7 +132,7 @@ module SimpleFormAttachments
       ].reject(&:blank?).flatten.join(',')
     end
 
-    # ---------------------------------------------------------------------
+
 
     def validated_extensions
       return unless validators
@@ -172,7 +170,7 @@ module SimpleFormAttachments
       relation_class_name.constantize.validators_on(field)
     end
 
-    # ---------------------------------------------------------------------
+
 
     def attachment_blank_field
       if multiple?
@@ -226,7 +224,7 @@ module SimpleFormAttachments
       template.hidden_field_tag('attachment_relation[key]', relation_key.to_s)
     end
 
-    # ---------------------------------------------------------------------
+
 
     def attachment_list
       container_classes = [SimpleFormAttachments.dom_class(:attachment_list)]
@@ -247,7 +245,7 @@ module SimpleFormAttachments
       end
     end
 
-    # ---------------------------------------------------------------------
+
 
     def handlebars_js_template
       template.content_tag :script, id: 'simple_form_attachments__template', type: 'text/html' do
