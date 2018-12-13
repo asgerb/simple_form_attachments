@@ -32,7 +32,7 @@ module SimpleFormAttachments
       end
     end
 
-    def input_html_classes
+    def input_class
       super.push(SimpleFormAttachments.dom_class)
     end
 
