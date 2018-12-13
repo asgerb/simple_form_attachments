@@ -33,7 +33,9 @@ module SimpleFormAttachments
     end
 
     def input_class
-      super.push(SimpleFormAttachments.dom_class)
+      res = [super]
+      res.push(SimpleFormAttachments.dom_class)
+      res
     end
 
     private
