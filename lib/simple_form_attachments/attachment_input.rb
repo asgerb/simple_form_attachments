@@ -32,16 +32,11 @@ module SimpleFormAttachments
       end
     end
 
-    def input_class
-      res = [super]
-      res.push(SimpleFormAttachments.dom_class)
-      res
-    end
-
     private
 
     def input_html_options
       super.merge(
+        class: SimpleFormAttachments.dom_class,
         data: {
           attachments_path: options.fetch(:route, route_from_configuration),
           max_number_of_files: options.fetch(:max_number_of_files, nil),
@@ -51,14 +46,10 @@ module SimpleFormAttachments
       )
     end
 
-
-
     def route_from_configuration
       res = AttachmentInput.configuration.route
       res.respond_to?(:call) ? res.call : res
     end
-
-
 
     def relation
       return unless @builder
@@ -97,8 +88,6 @@ module SimpleFormAttachments
       relation.relation.to_s
     end
 
-
-
     def multiple?
       return false unless relation
       !!relation.macro.to_s.end_with?('many')
@@ -118,8 +107,6 @@ module SimpleFormAttachments
       options.fetch(:sortable, multiple?)
     end
 
-
-
     def attachments
       return @builder.object.send(attribute_name).to_a unless multiple?
       @builder.object.send(attribute_name).sort_by { |a| @builder.object.send(relation_key).index(a.id) }
@@ -133,8 +120,6 @@ module SimpleFormAttachments
         validated_mime_types
       ].reject(&:blank?).flatten.join(',')
     end
-
-
 
     def validated_extensions
       return unless validators
@@ -171,8 +156,6 @@ module SimpleFormAttachments
     def validators(field = :file)
       relation_class_name.constantize.validators_on(field)
     end
-
-
 
     def attachment_blank_field
       if multiple?
@@ -226,8 +209,6 @@ module SimpleFormAttachments
       template.hidden_field_tag('attachment_relation[key]', relation_key.to_s)
     end
 
-
-
     def attachment_list
       container_classes = [SimpleFormAttachments.dom_class(:attachment_list)]
       container_classes << SimpleFormAttachments.dom_class(:attachment_list, :is_sortable) if sortable?
@@ -246,8 +227,6 @@ module SimpleFormAttachments
         end
       end
     end
-
-
 
     def handlebars_js_template
       template.content_tag :script, id: 'simple_form_attachments__template', type: 'text/html' do
