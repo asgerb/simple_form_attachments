@@ -17,6 +17,8 @@ module SimpleFormAttachments
     end
 
     def input(wrapper_options)
+      input_html_classes.push(SimpleFormAttachments.dom_class)
+
       template.content_tag :div, merge_wrapper_options(input_html_options, wrapper_options) do
         template.concat attachment_blank_field
         template.concat attachment_file_field
@@ -36,7 +38,6 @@ module SimpleFormAttachments
 
     def input_html_options
       super.merge(
-        class: SimpleFormAttachments.dom_class,
         data: {
           attachments_path: options.fetch(:route, route_from_configuration),
           max_number_of_files: options.fetch(:max_number_of_files, nil),
